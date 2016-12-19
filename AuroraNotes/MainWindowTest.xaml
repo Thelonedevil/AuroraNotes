@@ -1,0 +1,70 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AuroraNotes"
+        xmlns:DataAccess="clr-namespace:DataAccess;assembly=DataAccess" x:Class="AuroraNotes.MainWindowTest"
+        mc:Ignorable="d"
+        Title="MainWindowTest" Height="350" Width="525" Loaded="Window_Loaded">
+	<Window.CommandBindings>
+		<CommandBinding Command="New" Executed="NewCommand_Executed" CanExecute="CommonCommandBinding_CanExecute" />
+	</Window.CommandBindings>
+	<Window.Resources>
+		<CollectionViewSource x:Key="tableViewSource" d:DesignSource="{d:DesignInstance {x:Type DataAccess:Table}, CreateList=True}"/>
+		<CollectionViewSource x:Key="tableStacksViewSource" Source="{Binding Stacks, Source={StaticResource tableViewSource}}"/>
+	</Window.Resources>
+	<Grid DataContext="{StaticResource tableViewSource}">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="64"/>
+			<RowDefinition Height="1*" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="1*" />
+		</Grid.ColumnDefinitions>
+		<ToolBarTray HorizontalAlignment="Stretch" Height="64" Margin="10,10,10,0" VerticalAlignment="Top"  Grid.ColumnSpan="2" Grid.RowSpan="1" Grid.Row="0" Grid.Column="0">
+			<ToolBar x:Name="toolBar" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Top" Height="64">
+				<Button Command="New" Content="New" />
+			</ToolBar>
+		</ToolBarTray>
+		<TreeView x:Name="treeView" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Padding="0,0,10,0" Margin="10,10,0,10" VerticalAlignment="Stretch" ItemsSource="{Binding}" >
+			<TreeView.ItemContainerStyle>
+				<Style TargetType="{x:Type TreeViewItem}">
+					<Setter Property="IsExpanded" Value="True"/>
+					<EventSetter Event="TreeViewItem.Selected"
+                     Handler="TreeViewItem_Selected" />
+				</Style>
+			</TreeView.ItemContainerStyle>
+			<TreeView.Resources>
+				<HierarchicalDataTemplate DataType="{x:Type DataAccess:Table}" ItemsSource="{Binding Stacks}">
+					<TextBlock Text="{Binding Name}" Tag="{Binding TableID}" />
+				</HierarchicalDataTemplate>
+				<HierarchicalDataTemplate DataType="{x:Type DataAccess:Stack}" ItemsSource="{Binding Books}">
+					<TextBlock Text="{Binding Name}" Tag="{Binding StackID}" />
+				</HierarchicalDataTemplate>
+				<HierarchicalDataTemplate DataType="{x:Type DataAccess:Book}" ItemsSource="{Binding Pages}">
+					<TextBlock Text="{Binding Name}" Tag="{Binding BookID}" />
+				</HierarchicalDataTemplate>
+				<DataTemplate DataType="{x:Type DataAccess:Page}">
+					<TextBlock Text="{Binding Order}" Tag="{Binding PageID}"/>
+				</DataTemplate>
+			</TreeView.Resources>
+		</TreeView>
+		<TextBox x:Name="textBox" TextChanged="TextBox_TextChanged"  Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Margin="10,10,10,10" TextWrapping="Wrap" Text="{Binding Content, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Stretch" />
+		<!--<DataGrid x:Name="tableDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" Margin="10,10,10,151" ItemsSource="{Binding}" EnableRowVirtualization="True" AutoGenerateColumns="False">
+			<DataGrid.Columns>
+				<DataGridTextColumn x:Name="nameColumn" Width="SizeToHeader" Header="Name" Binding="{Binding Name}"/>
+				<DataGridTextColumn x:Name="tableIDColumn" Width="SizeToHeader" Header="Table ID" Binding="{Binding TableID}"/>
+			</DataGrid.Columns>
+		</DataGrid>
+		<DataGrid x:Name="stacksDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource tableStacksViewSource}}" Margin="10,123,10,32" RowDetailsVisibilityMode="VisibleWhenSelected">
+			<DataGrid.Columns>
+				<DataGridTextColumn x:Name="nameColumn1" Binding="{Binding Name}" Header="Name" Width="SizeToHeader"/>
+				<DataGridTextColumn x:Name="stackIDColumn" Binding="{Binding StackID}" Header="Stack ID" Width="SizeToHeader"/>
+				<DataGridTextColumn x:Name="tableIDColumn1" Binding="{Binding TableID}" Header="Table ID" Width="SizeToHeader"/>
+			</DataGrid.Columns>
+		</DataGrid>-->
+
+	</Grid>
+</Window>
