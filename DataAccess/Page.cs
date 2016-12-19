@@ -11,6 +11,7 @@ namespace DataAccess
 		public int PageID { get; set; }
 		public int Order { get; set; }
 		public string Content { get; set; }
+		public string Title { get; set; }
 		public int BookID { get; set; }
 		public virtual Book Book { get; set; }
 	}

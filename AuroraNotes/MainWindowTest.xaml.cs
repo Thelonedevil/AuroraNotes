@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.Entity;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using DataAccess;
+using Page = DataAccess.Page;
 
 namespace AuroraNotes
 {
@@ -50,6 +41,56 @@ namespace AuroraNotes
 			e.CanExecute = true;
 		}
 
+		private void NewStackCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			_context.SaveChanges();
+
+			treeView.Items.Refresh();
+			treeView.UpdateLayout();
+		}
+		private void NewBookCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			_context.SaveChanges();
+
+			treeView.Items.Refresh();
+			treeView.UpdateLayout();
+		}
+		private void NewPageCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			var item = treeView.SelectedItem;
+			int BookID = 0;
+			if (item is Book)
+			{
+				BookID = ((Book) item).BookID;
+			}else if (item is Page)
+			{
+				BookID = ((Page) item).BookID;
+			}
+			var popup = new NewPage(BookID);
+			_context.SaveChanges();
+
+			treeView.Items.Refresh();
+			treeView.UpdateLayout();
+		}
+		private void NewTableCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			var popup = new NewTable();
+			Table table;
+			if (popup.ShowDialog().GetValueOrDefault())
+			{
+				table = popup.Table;
+			}
+			else
+			{
+				return;
+			}
+			_context.Tables.Add(table);
+
+			_context.SaveChanges();
+
+			treeView.Items.Refresh();
+			treeView.UpdateLayout();
+		}
 		private void NewCommand_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
 			var item = treeView.SelectedItem;

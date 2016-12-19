@@ -5,7 +5,6 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -18,16 +17,16 @@ namespace AuroraNotes
 	/// <summary>
 	/// Interaction logic for NewBook.xaml
 	/// </summary>
-	public partial class NewBook : Window
+	public partial class NewPage : Window
 	{
 
-		public NewBook(int StackID) : this()
+		public NewPage(int BookID) : this()
 		{
-			Book = new Book {StackID = StackID};
+			Page = BookID > 0 ? new Page {BookID = BookID} : new Page();
 		}
 
-		public Book Book { get; set; }
-		public NewBook()
+		public Page Page { get; set; }
+		public NewPage()
 		{
 			
 			InitializeComponent();
@@ -42,7 +41,7 @@ namespace AuroraNotes
 
 		private void SaveCommand_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-			Book.Name = textBox.Text;
+			Page.Title = textBox.Text;
 			DialogResult = true;
 		}
 	}
